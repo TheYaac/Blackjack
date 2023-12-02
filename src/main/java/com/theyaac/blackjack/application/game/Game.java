@@ -5,31 +5,52 @@ import com.theyaac.blackjack.application.Hand;
 
 import java.util.Scanner;
 
-class Game {
-    private final Deck deck;
+public class Game {
+
+    private Deck deck;
     private final Hand playerHand;
     private final Hand dealerHand;
+
+    private String response;
+
+    private boolean ongoing;
+
+    private int playerChoice;
 
     public Game() {
         deck = new Deck();
         playerHand = new Hand();
         dealerHand = new Hand();
+        response = "";
+        ongoing = false;
+    }
+
+    public Deck getDeck() {
+        return deck;
+    }
+
+    public String getResponse() {
+        return response;
     }
 
     public void startGame() {
+        ongoing = true;
+        deck = new Deck();
+        deck.shuffle();
         playerHand.addCard(deck.drawCard());
         dealerHand.addCard(deck.drawCard());
         playerHand.addCard(deck.drawCard());
         dealerHand.addCard(deck.drawCard());
 
-        System.out.println("Welcome to Blackjack!");
+        response += "Welcome to Blackjack!\n";
         displayHands();
 
-        while (true) {
+        while (ongoing) {
             playerTurn();
 
             if (playerHand.isBust()) {
                 System.out.println("Bust! You lose.");
+                ongoing = false;
                 break;
             }
 
@@ -39,17 +60,19 @@ class Game {
 
             if (dealerHand.isBust() || playerHand.getScore() > dealerHand.getScore()) {
                 System.out.println("You win!");
+                ongoing = false;
             } else if (playerHand.getScore() < dealerHand.getScore()) {
                 System.out.println("You lose.");
+                ongoing = false;
             } else {
-                System.out.println("It's a tie!");
+                System.out.println("It's a tie! Dealer wins the house.");
+                ongoing = false;
             }
-
             break;
         }
     }
 
-    private void playerTurn() {
+    public void playerTurn() {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
@@ -72,17 +95,17 @@ class Game {
         }
     }
 
-    private void dealerTurn() {
+    public void dealerTurn() {
         while (dealerHand.getScore() < 17) {
             dealerHand.addCard(deck.drawCard());
         }
     }
 
-    private void displayHands() {
-        System.out.println("Your hand:");
-        playerHand.displayPlayer();
+    public void displayHands() {
+        response += "Your hand:\n";
+        response += playerHand.displayPlayer();
 
-        System.out.println("Dealer's hand:");
-        dealerHand.displayDealer();
+        response += "Dealer's hand:\n";
+        response += dealerHand.displayDealer();
     }
 }

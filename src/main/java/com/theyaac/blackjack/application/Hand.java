@@ -32,17 +32,17 @@ public class Hand {
         return score;
     }
 
-    public void displayPlayer() {
+    public String displayPlayer() {
+        String response = "";
         for (Card card : cards) {
-            System.out.println(card);
+            response += card + "\n";
         }
-        System.out.println("Score: " + getScore());
-        System.out.println();
+        response += "Current Highest Score: " + getScore() + "\n\n";
+        return response;
     }
 
-    public void displayDealer() {
-        System.out.println(cards.get(0));
-        System.out.println();
+    public String displayDealer() {
+        return cards.get(0) + "\n\n";
     }
 
     public boolean isBust() {
