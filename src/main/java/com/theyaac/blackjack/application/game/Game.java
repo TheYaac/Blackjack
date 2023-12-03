@@ -46,7 +46,10 @@ public class Game {
         displayHands();
 
         while (ongoing) {
-            playerTurn();
+            Scanner scanner = new Scanner(System.in);
+            int choice = scanner.nextInt();
+
+            playerTurn(choice);
 
             if (playerHand.isBust()) {
                 System.out.println("Bust! You lose.");
@@ -72,22 +75,22 @@ public class Game {
         }
     }
 
-    public void playerTurn() {
-        Scanner scanner = new Scanner(System.in);
+    public void playerTurn(int choice) {
 
         while (true) {
             System.out.println("1. Hit");
             System.out.println("2. Stay");
 
-            int choice = scanner.nextInt();
-
             if (choice == 1) {
                 playerHand.addCard(deck.drawCard());
+                System.out.println("You hit");
                 displayHands();
                 if (playerHand.isBust()) {
                     break;
                 }
             } else if (choice == 2) {
+                System.out.println("You stay");
+                displayHands();
                 break;
             } else {
                 System.out.println("Invalid choice. Please enter 1 or 2.");
@@ -107,5 +110,6 @@ public class Game {
 
         response += "Dealer's hand:\n";
         response += dealerHand.displayDealer();
+
     }
 }
